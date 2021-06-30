@@ -6,7 +6,7 @@ namespace Assets.Scripts.Player
     {
         public float TurnSpeed = 1;
         public float ForewardSpeed = 1;
-
+        public float MaxSpeed = 20;
 
         private GameObject ship;
         private KeyMap keyMap;
@@ -18,6 +18,7 @@ namespace Assets.Scripts.Player
             keyMap = sceneScripts.GetComponent<KeyMap>();
             ship = this.transform.gameObject;
         }
+
         private void FixedUpdate()
         {
             if (Input.GetKey(keyMap.TurnLeft))
@@ -30,7 +31,14 @@ namespace Assets.Scripts.Player
             }
             if (Input.GetKey(keyMap.Foreward))
             {
-                ship.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * ForewardSpeed);
+                if (ship.GetComponent<Rigidbody2D>().velocity.magnitude < MaxSpeed)
+                {
+                    ship.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.up * ForewardSpeed);
+                }
+                else
+                {
+                    ship.GetComponent<Rigidbody2D>().velocity *= .9999f;
+                }
             }
             if (Input.GetKey(keyMap.TurnAround))
             {
@@ -45,7 +53,6 @@ namespace Assets.Scripts.Player
                     ship.GetComponent<Rigidbody2D>().AddTorque(TurnSpeed);
                 }
             }
-            
         }
     }
 }
